@@ -1,0 +1,51 @@
+logistic regression¶
+parastoo afarsyabi 9703014
+
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+fruits = pd.read_table('fruit.txt')
+fruits.head()
+(m,p)=fruits.shape
+f=open("fruit.txt","r")
+x=np.zeros((2,m+1))
+y=np.zeros((1,m+1))
+
+con=0
+for line in f:
+    field=line.split("\t")
+    if field[4]!="width":
+        x[0,con]=field[4]
+        x[1,con]=field[5]
+    if field[1]=='apple':
+        y[0,con]=1
+    else:
+        y[0,con]=0
+    con+=1
+z=np.zeros((1,m+1))
+A=np.zeros((1,m+1))
+dz=np.zeros((1,m+1))[np.newaxis]
+dw=np.zeros((2,1))
+w=np.ones((2,1))[np.newaxis]
+wt=np.ones((1,2))
+L=np.zeros((1,m+1))
+alfa=0.3
+b=0
+J=0
+w1=0.2
+w2=0.3
+wt=[[w1,w2]]
+w=[[w1],[w2]]
+
+for t in range(0,100):
+    z=np.dot(wt,x)+b
+    A=1 / (1 + np.exp(-z))
+    L=-(y*np.log(A)+(1-y)*np.log(A))
+    dz=A-z
+    dw=1/(m+1)*(np.dot(x,dz.T))
+    db=1/(m+1)*(np.sum(dz))
+    J=1/(m+1)*(np.sum(L))
+    w=w-alfa*dw
+    b=b-alfa*db

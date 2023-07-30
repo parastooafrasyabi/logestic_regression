@@ -1,0 +1,49 @@
+logistic regression¶
+parastoo afarsyabi 9703014
+
+
+import numpy as np
+import pandas as pd
+fruits = pd.read_table('fruit.txt')
+fruits.head()
+(m,p)=fruits.shape
+
+f=open("fruit.txt","r")
+x=np.zeros((2,m+1))
+y=np.zeros((1,m+1))
+
+con=0
+for line in f:
+    field=line.split("\t")
+    if field[4]!="width":
+        x[0,con]=field[4]
+        x[1,con]=field[5]
+    if field[1]=='apple':
+        y[0,con]=1
+    else:
+        y[0,con]=0
+    con+=1
+  
+z=np.zeros((1,m+1))
+A=np.zeros((1,m+1))
+dz=np.zeros((1,m+1))
+L=np.zeros((1,m+1))
+w1=0.2
+w2=0.3
+b=0
+alfa=0.4
+for t in range(0,100):
+        for i in range(0,m+1):
+            z[0,i]=w1*x[0,i]+w2*x[1,i]
+            A[0,i]=1 / (1 + np.exp(-z[0,i]))
+            dz[0,i]=A[0,i]-y[0,i]
+            dw1=1/(m+1)*(x[0,i]*dz[0,i])
+            dw2=1/(m+1)*(x[1,i]*dz[0,i])
+            L[0,i]=-(y[0,i]*np.log(A[0,i])+(1-y[0,i])*np.log(A[0,i]))
+        db=1/(m+1)*(np.sum(dz))
+        j=1/(m+1)*(np.sum(L))
+        w1=w1-alfa*dw1
+        w2=w2-alfa*dw2
+        b=b-alfa*db
+        
+print (b)
